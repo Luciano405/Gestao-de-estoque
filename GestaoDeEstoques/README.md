@@ -5,7 +5,7 @@ Projeto para disciplina de Pesquisa Operacional — implementação do Branch & 
 # 1. Dataset
 - Nome: Retail Store Inventory Forecasting Dataset (Kaggle)
 - Link: (https://www.kaggle.com/datasets/anirudhchauhan/retail-store-inventory-forecasting-dataset?resource=download)
-- Colunas usadas: Product ID, Category, Inventory Level, Units Sold, Demand Forecast, Price, Competitor Pricing
+- Colunas usadas: Product ID, Category, Inventory Level, Units Sold, Demand Forecast, Price
 
 # 2. Estrutura do repositório
 - `dataset.py` — prepara e amostra o CSV.
@@ -18,3 +18,4 @@ Projeto para disciplina de Pesquisa Operacional — implementação do Branch & 
 ```bash
 python -m pip install -r requirements.txt
 python -m streamlit run app.py
+

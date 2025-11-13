@@ -17,3 +17,4 @@ Projeto para disciplina de Pesquisa Operacional — implementação do Branch & 
 1. Instalar dependências:
 ```bash
 python -m pip install -r requirements.txt
+python -m streamlit run app.py

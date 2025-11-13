@@ -1,46 +1,54 @@
 import pandas as pd
 
 def prepare_dataset(path_csv: str, sample_fraction: float = 0.1) -> pd.DataFrame:
-  
-    #Le o CSV
+
+    """
+    Prepara o dataset para o algoritmo Branch & Bound:
+
+    """
+
+    
     df = pd.read_csv(path_csv)
-    #Fraciona o dataset se necessário
+
     df = df.sample(frac=sample_fraction, random_state=42)
-    #colunas relevantes
+
     cols = [
         "Product ID", "Category", "Inventory Level", "Units Sold",
-        "Demand Forecast", "Price", "Competitor Pricing"
+        "Demand Forecast", "Price"
     ]
     df = df[cols].copy()
 
-   
     df_grouped = df.groupby(["Product ID", "Category"], as_index=False).agg({
         "Inventory Level": "mean",
         "Units Sold": "sum",
         "Demand Forecast": "mean",
-        "Price": "mean",
-        "Competitor Pricing": "mean"
+        "Price": "mean"
     })
 
     df_grouped["Lucro Estimado"] = (
-        (df_grouped["Price"] - df_grouped["Competitor Pricing"]) * df_grouped["Demand Forecast"]
-    ).clip(lower=0)
+        df_grouped["Price"] * 0.30 * df_grouped["Demand Forecast"]
+    )
 
     df_grouped["Volume (m³)"] = df_grouped["Inventory Level"]
 
-    df_grouped["Giro de Estoque"] = (
-        df_grouped["Units Sold"] / (df_grouped["Inventory Level"] + 1e-9)
-    )
 
-    
     df_grouped["Volume (m³)"] = (
         df_grouped["Volume (m³)"] / df_grouped["Volume (m³)"].max() * 100
     )
 
 
+    df_grouped["Giro de Estoque"] = (
+        df_grouped["Units Sold"] / (df_grouped["Inventory Level"] + 1e-9)
+    )
+
+ 
     final_df = df_grouped[[
         "Product ID", "Category", "Lucro Estimado", "Volume (m³)", "Giro de Estoque"
     ]]
+
+
+    final_df = final_df.round(2)
+
 
     print(f"\n Dataset preparado com {len(final_df)} produtos únicos.\n")
     print(final_df.head(10))
